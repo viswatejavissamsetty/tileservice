@@ -100,19 +100,22 @@ public class MyQSTileService extends TileService {
         if (tile != null) {
             tile.setState(Tile.STATE_ACTIVE);
             tile.updateTile();
+
+            Toast.makeText(this, "Triple-click detected", Toast.LENGTH_LONG).show();
+
             // Write your code here to perform the action you want when a triple-click is
             // detected.
             // this.makeEmergencyApiCall();
             // this.logLocation();
 
-            FileOperationsService fileOperationsService = new FileOperationsService();
-            String fileName = "phonenumber.txt";
-            String phoneNumber = fileOperationsService.readFromFile(fileName);
-            if (phoneNumber == null) {
-                Toast.makeText(this, "Phone number not found", Toast.LENGTH_SHORT).show();
-            }
+            // FileOperationsService fileOperationsService = new FileOperationsService();
+            // String fileName = "phonenumber.txt";
+            // String phoneNumber = fileOperationsService.readFromFile(fileName);
+            // if (phoneNumber == null) {
+            // Toast.makeText(this, "Phone number not found", Toast.LENGTH_SHORT).show();
+            // }
 
-            System.out.println("Phone number: " + phoneNumber);
+            // System.out.println("Phone number: " + phoneNumber);
             // LocationManager locationManager = (LocationManager)
             // getSystemService(Context.LOCATION_SERVICE);
             // LocationListener locationListener = new LocationListener() {
@@ -173,6 +176,7 @@ public class MyQSTileService extends TileService {
                 // Auto-inactive the tile after 5 seconds
                 Tile inactiveTile = getQsTile();
                 if (inactiveTile != null) {
+                    Toast.makeText(MyQSTileService.this, "Auto-inactive", Toast.LENGTH_SHORT).show();
                     inactiveTile.setState(Tile.STATE_INACTIVE);
                     inactiveTile.updateTile();
                 }
