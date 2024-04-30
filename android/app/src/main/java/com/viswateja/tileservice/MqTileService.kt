@@ -4,6 +4,7 @@ class MyQSTileService: TileService() {
   override fun onTileAdded() {
     super.onTileAdded()
   }
+
   // Called when your app can update your tile.
   override fun onStartListening() {
     super.onStartListening()
