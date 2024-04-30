@@ -1,0 +1,12 @@
+<resources>
+  <string name="app_name">tileservice</string>
+  <string name="expo_splash_screen_resize_mode" translatable="false">contain</string>
+  <string name="expo_splash_screen_status_bar_translucent" translatable="false">false</string>
+  <string name="lhe_emergency" translatable="false">LHE Emergency</string>
+  <string name="emergency_api_url" translatable="false">https://dev-emergency.lifehealthemergency.com/api/emergency</string>
+
+  <!-- <string name="emergency_api_url" translatable="false">https://emergency.lifehealthemergency.com/api/emergency</string>-->
+
+  <string name="documents_base_path">file:///data/user/0/com.viswateja.tileservice/files/</string>
+</resources>
+
