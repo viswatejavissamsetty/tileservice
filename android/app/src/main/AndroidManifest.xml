@@ -43,7 +43,7 @@
       android:name=".MyQSTileService"
       android:exported="true"
       android:label="LHE"
-      android:icon="@drawable/my_default_icon_label"
+      android:icon="@drawable/vector-drawable.png"
       android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
       <intent-filter>
         <action android:name="android.service.quicksettings.action.QS_TILE" />
