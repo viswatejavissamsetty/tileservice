@@ -1,21 +1,26 @@
 import { StatusBar } from "expo-status-bar";
 import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
 import * as FileSystem from "expo-file-system";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const FILE_PATH = FileSystem.documentDirectory + "phonenumber.txt";
+const FILE_PATH = FileSystem.documentDirectory;
 
 export default function App() {
   const [fileContent, setFileContent] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumberFromFile, setPhoneNumberFromFile] = useState("");
+  const [tempText, setTempText] = useState("Hello, world!");
+
+  useEffect(() => {
+    console.log("File path: ", FILE_PATH);
+  }, []);
 
   const writeToFile = async () => {
     FileSystem.writeAsStringAsync(
       FileSystem.documentDirectory + "test.txt",
-      "Hello, world!",
+      tempText,
       { encoding: FileSystem.EncodingType.UTF8 }
     );
-    console.log("Path to file: ", FileSystem.documentDirectory + "test.txt");
     console.log("File written!");
   };
 
@@ -24,11 +29,10 @@ export default function App() {
       FileSystem.documentDirectory + "test.txt",
       { encoding: FileSystem.EncodingType.UTF8 }
     );
-    console.log("Data read from file: ", data);
     setFileContent(data);
   };
 
-  const savePhoneNumber = async () => {
+  const savePhoneNumberToFile = async () => {
     // Validate phone number and save it to file
     if (!phoneNumber) {
       Alert.alert("Please enter a phone number");
@@ -39,26 +43,47 @@ export default function App() {
       return;
     }
 
-    await FileSystem.writeAsStringAsync(FILE_PATH, phoneNumber, {
-      encoding: FileSystem.EncodingType.UTF8,
-    });
+    await FileSystem.writeAsStringAsync(
+      FILE_PATH + "phonenumber.txt",
+      phoneNumber,
+      {
+        encoding: FileSystem.EncodingType.UTF8,
+      }
+    );
     Alert.alert("Phone number saved!");
   };
 
-  const readPhoneNumber = async () => {
-    const data = await FileSystem.readAsStringAsync(FILE_PATH, {
-      encoding: FileSystem.EncodingType.UTF8,
-    });
-    setPhoneNumber(data);
-    Alert.alert("Phone number read!");
+  const readPhoneNumberFromFile = async () => {
+    const data = await FileSystem.readAsStringAsync(
+      FILE_PATH + "phonenumber.txt",
+      {
+        encoding: FileSystem.EncodingType.UTF8,
+      }
+    );
+    setPhoneNumberFromFile(data);
   };
 
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <Text style={{ fontSize: 32 }}>Hello world</Text>
+      <Text
+        style={{
+          fontSize: 25,
+          fontWeight: "bold",
+          marginBottom: 20,
+        }}
+      >
+        File System
+      </Text>
 
-      <View>
+      <View
+        style={{
+          width: "100%",
+          padding: 10,
+          margin: 10,
+          borderWidth: 1,
+          borderColor: "black",
+        }}
+      >
         <TextInput
           value={phoneNumber}
           onChangeText={setPhoneNumber}
@@ -67,43 +92,59 @@ export default function App() {
             borderWidth: 1,
             borderColor: "black",
             padding: 10,
-            margin: 10,
-            width: 200,
+            width: "100%",
             borderRadius: 5,
           }}
           keyboardType="phone-pad"
         />
-        <Button title="Save Phone number" onPress={savePhoneNumber} />
+        <Button title="Save Phone number" onPress={savePhoneNumberToFile} />
+
+        <Text
+          style={{
+            fontSize: 16,
+            padding: 10,
+            backgroundColor: "lightgray",
+          }}
+        >
+          Phone number: {phoneNumberFromFile}
+        </Text>
+        <Button title="Read Phone number" onPress={readPhoneNumberFromFile} />
       </View>
 
       <View
         style={{
           margin: 10,
+          width: "100%",
+          borderWidth: 1,
+          borderColor: "black",
+          padding: 10,
         }}
       >
-        <Button title="Read Phone number" onPress={readPhoneNumber} />
-        <Text>Phone number: {phoneNumber}</Text>
-      </View>
-
-      <View
-        style={{
-          margin: 10,
-        }}
-      >
+        <Text>File System</Text>
+        <TextInput
+          value={tempText}
+          onChangeText={setTempText}
+          style={{
+            borderWidth: 1,
+            borderColor: "black",
+            padding: 10,
+            width: "100%",
+            borderRadius: 5,
+          }}
+        />
         <Button title="Write to file" onPress={writeToFile} />
         <Button title="Read from file" onPress={readDataFromFile} />
+        <Text
+          style={{
+            fontSize: 16,
+            padding: 10,
+            backgroundColor: "lightgray",
+          }}
+        >
+          File Content: {fileContent}
+        </Text>
       </View>
 
-      <Text
-        style={{
-          fontSize: 16,
-          margin: 10,
-          padding: 10,
-          backgroundColor: "lightgray",
-        }}
-      >
-        File Content: {fileContent}
-      </Text>
       <StatusBar style="auto" />
     </View>
   );
@@ -115,5 +156,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 20,
   },
 });

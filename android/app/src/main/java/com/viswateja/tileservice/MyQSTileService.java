@@ -111,6 +111,10 @@ public class MyQSTileService extends TileService {
                 System.out.println("Phone number not found");
             }
 
+            // Logic to show data in toast message
+            String data = "Location: " + x[0] + ", " + x[1] + "\nPhone number: " + phoneNumber;
+            Toast.makeText(this, data, Toast.LENGTH_LONG).show();
+
         }
 
         // Schedule auto-inactive after 5 seconds

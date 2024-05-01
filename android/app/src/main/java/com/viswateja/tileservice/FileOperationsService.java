@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class FileOperationsService {
-    private final String fileBasePath = Resources.getSystem().getString(R.string.documents_base_path);
+    private final String fileBasePath = "/data/user/0/com.viswateja.tileservice/files/";
+    // private final String fileBasePath =
+    // Resources.getSystem().getString(R.string.documents_base_path);
 
     public void writeIntoFile(String fileName, String content) {
         try {

@@ -7,6 +7,6 @@
 
   <!-- <string name="emergency_api_url" translatable="false">https://emergency.lifehealthemergency.com/api/emergency</string>-->
 
-  <string name="documents_base_path">file:///data/user/0/com.viswateja.tileservice/files/</string>
+  <string name="documents_base_path" translatable="false" formatted="false">/data/user/0/com.viswateja.tileservice/files/</string>
 </resources>
 
