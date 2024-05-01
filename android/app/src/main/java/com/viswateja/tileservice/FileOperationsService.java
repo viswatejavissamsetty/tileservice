@@ -11,10 +11,6 @@ import java.util.Scanner;
 public class FileOperationsService {
     private final String fileBasePath = Resources.getSystem().getString(R.string.documents_base_path);
 
-    FileOperationsService () {
-        System.out.println(fileBasePath);
-    }
-
     public void writeIntoFile(String fileName, String content) {
         try {
             FileWriter f = new FileWriter(fileBasePath + fileName);
@@ -39,7 +35,7 @@ public class FileOperationsService {
             dataReader.close();
             return fileData;
         } catch (FileNotFoundException e) {
-            System.out.println("Unexcpected error occurred!");
+            System.out.println("Unexpected error occurred!");
             e.printStackTrace();
             return null;
         }

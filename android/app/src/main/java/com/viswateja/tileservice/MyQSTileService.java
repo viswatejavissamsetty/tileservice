@@ -1,29 +1,12 @@
 package com.viswateja.tileservice;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.widget.Toast;
 
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.util.Log;
-
 import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class MyQSTileService extends TileService {
@@ -102,69 +85,31 @@ public class MyQSTileService extends TileService {
             tile.updateTile();
 
             Toast.makeText(this, "Triple-click detected", Toast.LENGTH_LONG).show();
+            System.out.println("Triple-click detected");
 
-            // Write your code here to perform the action you want when a triple-click is
-            // detected.
-            // this.makeEmergencyApiCall();
-            // this.logLocation();
+            // Get the location and log it in the console
+            LocationService locationService = new LocationService();
+            Number[] x = locationService.getCurrentLocation(this);
 
-            // FileOperationsService fileOperationsService = new FileOperationsService();
-            // String fileName = "phonenumber.txt";
-            // String phoneNumber = fileOperationsService.readFromFile(fileName);
-            // if (phoneNumber == null) {
-            // Toast.makeText(this, "Phone number not found", Toast.LENGTH_SHORT).show();
-            // }
+            if (x != null) {
+                System.out.println("Location: " + x[0] + ", " + x[1]);
+            } else {
+                System.out.println("Location not found");
+            }
 
-            // System.out.println("Phone number: " + phoneNumber);
-            // LocationManager locationManager = (LocationManager)
-            // getSystemService(Context.LOCATION_SERVICE);
-            // LocationListener locationListener = new LocationListener() {
-            // public void onLocationChanged(Location location) {
-            // // Called when a new location is found by the network location provider.
-            // System.out.println("Location: " + location.getLatitude() + ", " +
-            // location.getLongitude());
-            // try {
-            // URL url = new URL(getString(R.string.emergency_api_url));
-            // HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            // connection.setRequestMethod("POST");
-            // connection.setRequestProperty("Content-Type", "application/json");
-            // connection.setDoOutput(true);
-            // DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-            // String requestBody = "{\"phoneNumber\": \"" + phoneNumber + "\", \"gps\": ["
-            // + location.getLatitude() + ", " + location.getLongitude() + "]}";
-            // wr.writeBytes(requestBody);
-            // wr.flush();
-            // wr.close();
+            locationService.stopLocationUpdates();
 
-            // int responseCode = connection.getResponseCode();
-            // System.out.println("Response Code: " + responseCode);
+            // logic to get user phone number
+            FileOperationsService fileOperationsService = new FileOperationsService();
 
-            // BufferedReader in = new BufferedReader(new
-            // InputStreamReader(connection.getInputStream()));
-            // String inputLine;
-            // StringBuffer response = new StringBuffer();
-            // while ((inputLine = in.readLine()) != null) {
-            // response.append(inputLine);
-            // }
-            // in.close();
+            System.out.println(fileOperationsService.hadFile("phonenumber.txt"));
 
-            // System.out.println("Response: " + response.toString());
-            // } catch (MalformedURLException e) {
-            // e.printStackTrace();
-            // } catch (IOException e) {
-            // e.printStackTrace();
-            // }
-            // }
-
-            // public void onStatusChanged(String provider, int status, Bundle extras) {
-            // }
-
-            // public void onProviderEnabled(String provider) {
-            // }
-
-            // public void onProviderDisabled(String provider) {
-            // }
-            // };
+            String phoneNumber = fileOperationsService.readFromFile("phonenumber.txt");
+            if (phoneNumber != null) {
+                System.out.println("Phone number: " + phoneNumber);
+            } else {
+                System.out.println("Phone number not found");
+            }
 
         }
 
@@ -183,52 +128,6 @@ public class MyQSTileService extends TileService {
             }
         }, AUTO_INACTIVE_DELAY);
     }
-
-    // private void logLocation() {
-    // LocationManager locationManager = (LocationManager)
-    // getSystemService(Context.LOCATION_SERVICE);
-
-    // LocationListener locationListener = new LocationListener() {
-    // public void onLocationChanged(Location location) {
-    // // Called when a new location is found by the network location provider.
-    // System.out.println("Location: " + location.getLatitude() + ", " +
-    // location.getLongitude());
-    // }
-
-    // public void onStatusChanged(String provider, int status, Bundle extras) {
-    // }
-
-    // public void onProviderEnabled(String provider) {
-    // }
-
-    // public void onProviderDisabled(String provider) {
-    // }
-    // };
-
-    // try {
-    // locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,
-    // 0, locationListener);
-    // } catch (SecurityException e) {
-    // System.out.println("Location permission denied");
-    // }
-    // }
-
-    // private void makeEmergencyApiCall() throws IOException {
-    // // URL: https://dev-emergency.lifehealthemergency.com/api/emergency
-    // // Method: POST
-    // // Body: {phoneNumber: "1234567890", gps: [12.3456, 78.9012]}
-
-    // // get url for andtrid strings
-    // String apiUrl = getString(R.string.emergency_api_url);
-    // System.out.println("URL: " + apiUrl);
-
-    // URL url = new URL(apiUrl);
-    // HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-    // String requestBody = "{\"phoneNumber\": \"1234567890\", \"gps\": [12.3456,
-    // 78.9012]}";
-
-    // }
 
     // Called when the user removes your tile.
     @Override
