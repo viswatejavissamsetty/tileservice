@@ -31,6 +31,14 @@
       "eas": {
         "projectId": "9a82f512-6242-4abc-969a-4ab924f1e787"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow LHE to use your location."
+        }
+      ]
+    ]
   }
 }

@@ -1,5 +1,6 @@
 package com.viswateja.tileservice;
 
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.service.quicksettings.Tile;
@@ -111,9 +112,15 @@ public class MyQSTileService extends TileService {
                 System.out.println("Phone number not found");
             }
 
-            // Logic to show data in toast message
-            String data = "Location: " + x[0] + ", " + x[1] + "\nPhone number: " + phoneNumber;
-            Toast.makeText(this, data, Toast.LENGTH_LONG).show();
+            if (x != null) {
+                // Logic to show data in toast message
+                String data = "Location: " + x[0] + ", " + x[1] + "\nPhone number: " + phoneNumber;
+                Toast.makeText(this, data, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Location not found", Toast.LENGTH_LONG).show();
+            }
+
+            this.playTone();
 
         }
 
@@ -137,5 +144,10 @@ public class MyQSTileService extends TileService {
     @Override
     public void onTileRemoved() {
         super.onTileRemoved();
+    }
+
+    private void playTone() {
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.emergency_alarm1);
+        mediaPlayer.start();
     }
 }

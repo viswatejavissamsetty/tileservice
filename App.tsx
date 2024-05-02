@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { useEffect, useState } from "react";
+import { LocationPermission } from "./permissions/location-permissions";
 
 const FILE_PATH = FileSystem.documentDirectory;
 
@@ -65,6 +66,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <LocationPermission />
       <Text
         style={{
           fontSize: 25,
