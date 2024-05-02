@@ -2,7 +2,7 @@
   <string name="app_name">tileservice</string>
   <string name="expo_splash_screen_resize_mode" translatable="false">contain</string>
   <string name="expo_splash_screen_status_bar_translucent" translatable="false">false</string>
-  <string name="lhe_emergency" translatable="false">LHE Emergency</string>
+  <string name="lhe_emergency" translatable="false" formatted="true">LHE Emergency</string>
   <string name="emergency_api_url" translatable="false">https://dev-emergency.lifehealthemergency.com/api/emergency</string>
 
   <!-- <string name="emergency_api_url" translatable="false">https://emergency.lifehealthemergency.com/api/emergency</string>-->

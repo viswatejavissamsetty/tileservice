@@ -90,15 +90,13 @@ public class MyQSTileService extends TileService {
 
             // Get the location and log it in the console
             LocationService locationService = new LocationService();
-            Number[] x = locationService.getCurrentLocation(this);
+            Number[] currentLocation = locationService.getCurrentLocation(this);
 
-            if (x != null) {
-                System.out.println("Location: " + x[0] + ", " + x[1]);
-            } else {
-                System.out.println("Location not found");
+            if (currentLocation != null) {
+                System.out.println("Location: " + currentLocation[0] + ", " + currentLocation[1]);
             }
 
-            locationService.stopLocationUpdates();
+            // locationService.stopLocationUpdates();
 
             // logic to get user phone number
             FileOperationsService fileOperationsService = new FileOperationsService();
@@ -112,9 +110,9 @@ public class MyQSTileService extends TileService {
                 System.out.println("Phone number not found");
             }
 
-            if (x != null) {
+            if (currentLocation != null) {
                 // Logic to show data in toast message
-                String data = "Location: " + x[0] + ", " + x[1] + "\nPhone number: " + phoneNumber;
+                String data = "Location: " + currentLocation[0] + ", " + currentLocation[1] + "\nPhone number: " + phoneNumber;
                 Toast.makeText(this, data, Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this, "Location not found", Toast.LENGTH_LONG).show();
