@@ -32,7 +32,7 @@ public class MyQSTileService extends TileService {
     /**
      * Time interval in milliseconds for triple-click detection
      */
-    private static final long TIME_INTERVAL = 500;
+    private static final long TIME_INTERVAL = 1000;
     /**
      * Maximum number of clicks for a triple-click
      */
@@ -40,7 +40,7 @@ public class MyQSTileService extends TileService {
     /**
      * Delay in milliseconds for auto-inactive after triple click
      */
-    private static final long AUTO_INACTIVE_DELAY = 1000 * 5;
+    private static final long AUTO_INACTIVE_DELAY = 1000 * 30;
 
     /**
      * Number of clicks detected
@@ -96,7 +96,7 @@ public class MyQSTileService extends TileService {
                 System.out.println("Location: " + currentLocation[0] + ", " + currentLocation[1]);
             }
 
-            // locationService.stopLocationUpdates();
+             locationService.stopLocationUpdates();
 
             // logic to get user phone number
             FileOperationsService fileOperationsService = new FileOperationsService();

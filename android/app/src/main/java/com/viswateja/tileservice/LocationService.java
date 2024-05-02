@@ -1,12 +1,16 @@
 package com.viswateja.tileservice;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+
+import androidx.core.app.NotificationCompat;
 
 public class LocationService {
     private LocationManager locationManager;
@@ -37,14 +41,14 @@ public class LocationService {
         };
 
         if (context
-                .checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                .checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             System.out.println("Location permission not granted");
             return null;
         }
 
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         if (location == null) {
             System.out.println("Location not found");
             return null;
@@ -56,4 +60,6 @@ public class LocationService {
     public void stopLocationUpdates() {
         locationManager.removeUpdates(locationListener);
     }
+
+
 }
