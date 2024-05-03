@@ -40,7 +40,7 @@ public class MyQSTileService extends TileService {
     /**
      * Delay in milliseconds for auto-inactive after triple click
      */
-    private static final long AUTO_INACTIVE_DELAY = 1000 * 30;
+    private static final long AUTO_INACTIVE_DELAY = 1000 * 60;
 
     /**
      * Number of clicks detected
@@ -96,7 +96,7 @@ public class MyQSTileService extends TileService {
                 System.out.println("Location: " + currentLocation[0] + ", " + currentLocation[1]);
             }
 
-             locationService.stopLocationUpdates();
+            locationService.stopLocationUpdates();
 
             // logic to get user phone number
             FileOperationsService fileOperationsService = new FileOperationsService();
@@ -112,11 +112,18 @@ public class MyQSTileService extends TileService {
 
             if (currentLocation != null) {
                 // Logic to show data in toast message
-                String data = "Location: " + currentLocation[0] + ", " + currentLocation[1] + "\nPhone number: " + phoneNumber;
+                String data = "Location: " + currentLocation[0] + ", " + currentLocation[1] + "\nPhone number: "
+                        + phoneNumber;
                 Toast.makeText(this, data, Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this, "Location not found", Toast.LENGTH_LONG).show();
             }
+
+            NotificationService notificationService = new NotificationService();
+            notificationService.showNotification(
+                    this,
+                    "Emergency",
+                    "It looks like an emergency is triggered by you. Please confirm if it is an emergency. If not please cancel the emergency. By opening the app.");
 
             this.playTone();
 
@@ -145,7 +152,7 @@ public class MyQSTileService extends TileService {
     }
 
     private void playTone() {
-        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.emergency_alarm1);
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.emergency_trigger_alarm);
         mediaPlayer.start();
     }
 }

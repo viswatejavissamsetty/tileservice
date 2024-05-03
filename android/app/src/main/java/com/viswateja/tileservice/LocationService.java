@@ -40,8 +40,11 @@ public class LocationService {
             }
         };
 
-        if (context
-                .checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if ((context
+                .checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                ||
+                (context.checkSelfPermission(
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
             System.out.println("Location permission not granted");
             return null;
         }
@@ -60,6 +63,5 @@ public class LocationService {
     public void stopLocationUpdates() {
         locationManager.removeUpdates(locationListener);
     }
-
 
 }

@@ -1,5 +1,14 @@
-import { StatusBar } from "expo-status-bar";
-import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  Button,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  StatusBar,
+} from "react-native";
 import * as FileSystem from "expo-file-system";
 import { useEffect, useState } from "react";
 import { LocationPermission } from "./permissions/location-permissions";
@@ -65,90 +74,92 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
-      <LocationPermission />
-      <Text
-        style={{
-          fontSize: 25,
-          fontWeight: "bold",
-          marginBottom: 20,
-        }}
-      >
-        File System
-      </Text>
-
-      <View
-        style={{
-          width: "100%",
-          padding: 10,
-          margin: 10,
-          borderWidth: 1,
-          borderColor: "black",
-        }}
-      >
-        <TextInput
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-          placeholder="Enter Phone number"
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView style={styles.container}>
+        <LocationPermission />
+        <Text
           style={{
+            fontSize: 25,
+            fontWeight: "bold",
+            marginBottom: 20,
+          }}
+        >
+          File System
+        </Text>
+
+        <View
+          style={{
+            width: "100%",
+            padding: 10,
+            margin: 10,
+            borderWidth: 1,
+            borderColor: "black",
+          }}
+        >
+          <TextInput
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+            placeholder="Enter Phone number"
+            style={{
+              borderWidth: 1,
+              borderColor: "black",
+              padding: 10,
+              width: "100%",
+              borderRadius: 5,
+            }}
+            keyboardType="phone-pad"
+          />
+          <Button title="Save Phone number" onPress={savePhoneNumberToFile} />
+
+          <Text
+            style={{
+              fontSize: 16,
+              padding: 10,
+              backgroundColor: "lightgray",
+            }}
+          >
+            Phone number: {phoneNumberFromFile}
+          </Text>
+          <Button title="Read Phone number" onPress={readPhoneNumberFromFile} />
+        </View>
+
+        <View
+          style={{
+            margin: 10,
+            width: "100%",
             borderWidth: 1,
             borderColor: "black",
             padding: 10,
-            width: "100%",
-            borderRadius: 5,
-          }}
-          keyboardType="phone-pad"
-        />
-        <Button title="Save Phone number" onPress={savePhoneNumberToFile} />
-
-        <Text
-          style={{
-            fontSize: 16,
-            padding: 10,
-            backgroundColor: "lightgray",
           }}
         >
-          Phone number: {phoneNumberFromFile}
-        </Text>
-        <Button title="Read Phone number" onPress={readPhoneNumberFromFile} />
-      </View>
+          <Text>File System</Text>
+          <TextInput
+            value={tempText}
+            onChangeText={setTempText}
+            style={{
+              borderWidth: 1,
+              borderColor: "black",
+              padding: 10,
+              width: "100%",
+              borderRadius: 5,
+            }}
+          />
+          <Button title="Write to file" onPress={writeToFile} />
+          <Button title="Read from file" onPress={readDataFromFile} />
+          <Text
+            style={{
+              fontSize: 16,
+              padding: 10,
+              backgroundColor: "lightgray",
+            }}
+          >
+            File Content: {fileContent}
+          </Text>
+        </View>
 
-      <View
-        style={{
-          margin: 10,
-          width: "100%",
-          borderWidth: 1,
-          borderColor: "black",
-          padding: 10,
-        }}
-      >
-        <Text>File System</Text>
-        <TextInput
-          value={tempText}
-          onChangeText={setTempText}
-          style={{
-            borderWidth: 1,
-            borderColor: "black",
-            padding: 10,
-            width: "100%",
-            borderRadius: 5,
-          }}
-        />
-        <Button title="Write to file" onPress={writeToFile} />
-        <Button title="Read from file" onPress={readDataFromFile} />
-        <Text
-          style={{
-            fontSize: 16,
-            padding: 10,
-            backgroundColor: "lightgray",
-          }}
-        >
-          File Content: {fileContent}
-        </Text>
-      </View>
-
-      <StatusBar style="auto" />
-    </View>
+        <StatusBar backgroundColor="#0000AA" />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -156,8 +167,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
 });

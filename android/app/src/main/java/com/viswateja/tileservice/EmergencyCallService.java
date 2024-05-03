@@ -10,7 +10,15 @@ import java.net.URL;
 public class EmergencyCallService {
     private final String emergencyApiURL = Resources.getSystem().getString(R.string.emergency_api_url);
 
-    private void makeEmergencyApiCall(String phoneNumber, Number[] gps) throws IOException {
+    /**
+     * Make an API call to the emergency service
+     * 
+     * @param phoneNumber
+     * @param gps
+     * @throws IOException
+     */
+
+    private void makeApiCall(String phoneNumber, Number[] gps) throws IOException {
         // URL: https://dev-emergency.lifehealthemergency.com/api/emergency
         // Method: POST
         // Body: {phoneNumber: "1234567890", gps: [12.3456, 78.9012]}
@@ -31,11 +39,22 @@ public class EmergencyCallService {
         try (OutputStream os = connection.getOutputStream()) {
             byte[] input = requestBody.getBytes("utf-8");
             os.write(input, 0, input.length);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
+        System.out.println("Response code: " + connection.getResponseCode());
+        System.out.println("Response message: " + connection.getResponseMessage());
+        System.out.println("Response body: " + connection.getInputStream().toString());
     }
 
-    private void deleteCancelApiCall(String phoneNumber) throws IOException {
+    /**
+     * Make an API call to cancel the emergency service
+     * 
+     * @param phoneNumber
+     * @throws IOException
+     */
+    private void deleteApiCall(String phoneNumber) throws IOException {
         // URL: https://dev-emergency.lifehealthemergency.com/api/cancel
         // Method: DELETE
         // Body: {phoneNumber: "1234567890"}
@@ -56,7 +75,13 @@ public class EmergencyCallService {
         try (OutputStream os = connection.getOutputStream()) {
             byte[] input = requestBody.getBytes("utf-8");
             os.write(input, 0, input.length);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        System.out.println("Response code: " + connection.getResponseCode());
+        System.out.println("Response message: " + connection.getResponseMessage());
+        System.out.println("Response body: " + connection.getInputStream().toString());
 
     }
 }

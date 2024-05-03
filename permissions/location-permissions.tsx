@@ -5,13 +5,21 @@ import { Alert, Button, Text, View } from "react-native";
 export function LocationPermission() {
   const [currentLocation, setCurrentLocation] =
     useState<Location.LocationObject | null>(null);
+  const [locationPermission, setLocationPermission] = useState(false);
 
   useEffect(() => {
     (async () => {
-      const { status } = await Location.requestBackgroundPermissionsAsync();
-      if (status !== "granted") {
+      const { status: forgroundStatus } =
+        await Location.requestForegroundPermissionsAsync();
+      if (forgroundStatus !== "granted") {
         Alert.alert("Permission to access location was denied");
       }
+      const { status: backgroundStatus } =
+        await Location.requestBackgroundPermissionsAsync();
+      if (backgroundStatus !== "granted") {
+        Alert.alert("Permission to access location was denied");
+      }
+      setLocationPermission(true);
     })();
   }, []);
 
@@ -21,19 +29,17 @@ export function LocationPermission() {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <View>
       <Text
         style={{
           fontSize: 20,
+          textAlign: "center",
+          marginTop: 20,
         }}
       >
-        Location permission granted!
+        {locationPermission
+          ? "Location permission granted"
+          : "Permission not granted"}
       </Text>
       <Button title="Get current location" onPress={getCurrrentLocation} />
       {currentLocation && (
