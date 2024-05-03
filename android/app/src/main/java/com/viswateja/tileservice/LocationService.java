@@ -51,13 +51,31 @@ public class LocationService {
 
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
-        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        if (location == null) {
-            System.out.println("Location not found");
+        Location location;
+
+        /**
+         * Check if location service is on and location is available
+         */
+
+        Boolean isLocationEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        if (isLocationEnabled) {
+            while (true) {
+                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                if (location != null) {
+                    break;
+                }
+            }
+            if (location == null) {
+                System.out.println("Location not found");
+                return null;
+            }
+            return new Number[] { location.getLatitude(), location.getLongitude() };
+        } else {
+            System.out.println("Location service is off");
             return null;
         }
 
-        return new Number[] { location.getLatitude(), location.getLongitude() };
     }
 
     public void stopLocationUpdates() {
