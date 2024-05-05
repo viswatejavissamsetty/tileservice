@@ -29,8 +29,8 @@ public class LHETileService extends TileService {
     public void onClick() {
         tapCount++;
         System.out.println("Tapped " + tapCount);
-        showNumberOfClicksLeftOnTile();
         if (isActive) {
+            showNumberOfClicksLeftOnTile();
             if (tapCount == 2) {
                 revertTile();
                 stopEmergency();

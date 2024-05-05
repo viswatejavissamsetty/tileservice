@@ -10,6 +10,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -48,6 +49,7 @@ public class LocationService {
                 (context.checkSelfPermission(
                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
             System.out.println("Location permission not granted");
+            Toast.makeText(context, "Location permission not granted", Toast.LENGTH_LONG).show();
             return null;
         }
 
@@ -70,11 +72,13 @@ public class LocationService {
             }
             if (location == null) {
                 System.out.println("Location not found");
+                Toast.makeText(context, "Location not found", Toast.LENGTH_LONG).show();
                 return null;
             }
             return new Number[] { location.getLatitude(), location.getLongitude() };
         } else {
             System.out.println("Location service is off");
+            Toast.makeText(context, "Location service is off", Toast.LENGTH_LONG).show();
             return null;
         }
 
