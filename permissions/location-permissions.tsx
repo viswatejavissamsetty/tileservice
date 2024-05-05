@@ -23,9 +23,16 @@ export function LocationPermission() {
     })();
   }, []);
 
-  const getCurrrentLocation = async () => {
-    const location = await Location.getCurrentPositionAsync({});
-    setCurrentLocation(location);
+  const getCurrrentLocation = () => {
+    console.log("Getting current location");
+    Location.getLastKnownPositionAsync()
+      .then((location) => {
+        setCurrentLocation(location);
+        console.log(location);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (

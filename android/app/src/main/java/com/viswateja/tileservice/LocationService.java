@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 
 import androidx.core.app.NotificationCompat;
@@ -15,6 +16,7 @@ import androidx.core.app.NotificationCompat;
 public class LocationService {
     private LocationManager locationManager;
     private LocationListener locationListener;
+    private String locationProvider = LocationManager.NETWORK_PROVIDER;
 
     public Number[] getCurrentLocation(Context context) {
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -49,7 +51,7 @@ public class LocationService {
             return null;
         }
 
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
 
         Location location;
 
@@ -57,11 +59,11 @@ public class LocationService {
          * Check if location service is on and location is available
          */
 
-        Boolean isLocationEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        Boolean isLocationEnabled = locationManager.isProviderEnabled(locationProvider);
 
         if (isLocationEnabled) {
             while (true) {
-                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                location = locationManager.getLastKnownLocation(locationProvider);
                 if (location != null) {
                     break;
                 }
@@ -80,6 +82,11 @@ public class LocationService {
 
     public void stopLocationUpdates() {
         locationManager.removeUpdates(locationListener);
+    }
+
+    public boolean isLocationServiceEnabled(Context context) {
+        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(locationProvider);
     }
 
 }

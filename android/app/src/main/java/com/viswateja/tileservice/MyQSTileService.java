@@ -1,6 +1,9 @@
 package com.viswateja.tileservice;
 
+import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.service.quicksettings.Tile;
@@ -40,7 +43,12 @@ public class MyQSTileService extends TileService {
     /**
      * Delay in milliseconds for auto-inactive after triple click
      */
-    private static final long AUTO_INACTIVE_DELAY = 1000 * 60;
+    private static final long AUTO_INACTIVE_DELAY = 1000 * 10;
+
+    /**
+     * Default text to show on the tile
+     */
+    private static final String DEFAULT_TILE_TEXT = "LHE Emergency";
 
     /**
      * Number of clicks detected
@@ -55,25 +63,45 @@ public class MyQSTileService extends TileService {
     @Override
     public void onClick() {
         super.onClick();
-        long currentTime = System.currentTimeMillis();
+        openDialPadWithEmergencyNumber();
 
-        // Check if the time difference between the last click and the current click is
-        // within the interval
-        if (currentTime - lastClickTime < TIME_INTERVAL) {
-            clickCount++;
+        return;
 
-            // Check if triple-click is detected
-            if (clickCount == MAX_CLICKS) {
-                performTripleClickAction();
-                clickCount = 0; // Reset click count
-            }
-        } else {
-            // Reset click count if the time interval has passed since the last click
-            clickCount = 1;
+
+//        long currentTime = System.currentTimeMillis();
+//
+//
+//
+//        // Check if the time difference between the last click and the current click is
+//        // within the interval
+//        if (currentTime - lastClickTime < TIME_INTERVAL) {
+//            clickCount++;
+//            this.updateTileText("Left clicks: " + clickCount + "/3");
+//
+//            // Check if triple-click is detected
+//            if (clickCount == MAX_CLICKS) {
+//                this.updateTileText("Under Emergency Progress");
+//                performTripleClickAction();
+//                clickCount = 0; // Reset click count
+//            }
+//        } else {
+//            // Reset click count and tile text to default if the time interval has passed
+//            // since the
+//            // last click
+//            clickCount = 1;
+//            this.updateTileText(DEFAULT_TILE_TEXT);
+//        }
+//
+//        // Update last click time
+//        lastClickTime = currentTime;
+    }
+
+    private void updateTileText(String text) {
+        Tile tile = getQsTile();
+        if (tile != null) {
+            tile.setLabel(text);
+            tile.updateTile();
         }
-
-        // Update last click time
-        lastClickTime = currentTime;
     }
 
     /**
@@ -117,6 +145,9 @@ public class MyQSTileService extends TileService {
                 Toast.makeText(this, data, Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this, "Location not found", Toast.LENGTH_LONG).show();
+
+                // Open the dial pad with the emergency number
+                openDialPadWithEmergencyNumber();
             }
 
             NotificationService notificationService = new NotificationService();
@@ -139,10 +170,31 @@ public class MyQSTileService extends TileService {
                 if (inactiveTile != null) {
                     Toast.makeText(MyQSTileService.this, "Auto-inactive", Toast.LENGTH_SHORT).show();
                     inactiveTile.setState(Tile.STATE_INACTIVE);
+                    inactiveTile.setLabel(DEFAULT_TILE_TEXT);
                     inactiveTile.updateTile();
                 }
             }
         }, AUTO_INACTIVE_DELAY);
+    }
+
+    /**
+     * Emergency number to dial.
+     */
+    private static final String EMERGENCY_NUMBER = "112";
+
+    /**
+     * Method to open the dial pad with the emergency number.
+     */
+    private void openDialPadWithEmergencyNumber() {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + EMERGENCY_NUMBER));
+        intent.setClassName("com.android.phone","com.android.phone.OutgoingCallBroadcaster");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        try {
+            startActivity(intent);
+        } catch (SecurityException e) {
+            Toast.makeText(this, "An error occurred", Toast.LENGTH_LONG).show();
+        }
     }
 
     // Called when the user removes your tile.

@@ -22,7 +22,7 @@ export default function App() {
   const [tempText, setTempText] = useState("Hello, world!");
 
   useEffect(() => {
-    console.log("File path: ", FILE_PATH);
+    console.log("File path: " + FILE_PATH);
   }, []);
 
   const writeToFile = async () => {
@@ -87,15 +87,7 @@ export default function App() {
           File System
         </Text>
 
-        <View
-          style={{
-            width: "100%",
-            padding: 10,
-            margin: 10,
-            borderWidth: 1,
-            borderColor: "black",
-          }}
-        >
+        <View style={styles.blockStyle}>
           <TextInput
             value={phoneNumber}
             onChangeText={setPhoneNumber}
@@ -123,15 +115,7 @@ export default function App() {
           <Button title="Read Phone number" onPress={readPhoneNumberFromFile} />
         </View>
 
-        <View
-          style={{
-            margin: 10,
-            width: "100%",
-            borderWidth: 1,
-            borderColor: "black",
-            padding: 10,
-          }}
-        >
+        <View style={styles.blockStyle}>
           <Text>File System</Text>
           <TextInput
             value={tempText}
@@ -166,7 +150,15 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     paddingHorizontal: 10,
+    backgroundColor: "#fff",
+    gap: 5,
+  },
+  blockStyle: {
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "black",
+    marginBottom: 10,
+    borderRadius: 15,
   },
 });
