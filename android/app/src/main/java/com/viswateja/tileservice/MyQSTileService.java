@@ -162,17 +162,14 @@ public class MyQSTileService extends TileService {
 
         // Schedule auto-inactive after 5 seconds
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Auto-inactive the tile after 5 seconds
-                Tile inactiveTile = getQsTile();
-                if (inactiveTile != null) {
-                    Toast.makeText(MyQSTileService.this, "Auto-inactive", Toast.LENGTH_SHORT).show();
-                    inactiveTile.setState(Tile.STATE_INACTIVE);
-                    inactiveTile.setLabel(DEFAULT_TILE_TEXT);
-                    inactiveTile.updateTile();
-                }
+        handler.postDelayed(() -> {
+            // Auto-inactive the tile after 5 seconds
+            Tile inactiveTile = getQsTile();
+            if (inactiveTile != null) {
+                Toast.makeText(MyQSTileService.this, "Auto-inactive", Toast.LENGTH_SHORT).show();
+                inactiveTile.setState(Tile.STATE_INACTIVE);
+                inactiveTile.setLabel(DEFAULT_TILE_TEXT);
+                inactiveTile.updateTile();
             }
         }, AUTO_INACTIVE_DELAY);
     }

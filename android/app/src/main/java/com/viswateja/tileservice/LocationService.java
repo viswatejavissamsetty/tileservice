@@ -1,29 +1,29 @@
 package com.viswateja.tileservice;
 
 import android.Manifest;
-import android.app.Notification;
-import android.app.NotificationManager;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
+import android.os.Looper;
 import android.widget.Toast;
 
-import androidx.core.app.NotificationCompat;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 
-public class LocationService {
+public class LocationService extends Activity {
     private LocationManager locationManager;
     private LocationListener locationListener;
-    private String locationProvider = LocationManager.NETWORK_PROVIDER;
+    private final String  locationProvider = LocationManager.GPS_PROVIDER;
 
     public Number[] getCurrentLocation(Context context) {
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
-            public void onLocationChanged(Location location) {
+            public void onLocationChanged(@NonNull Location location) {
                 System.out.println("Location: " + location.getLatitude() + ", " + location.getLongitude());
             }
 
@@ -33,42 +33,53 @@ public class LocationService {
             }
 
             @Override
-            public void onProviderEnabled(String provider) {
+            public void onProviderEnabled(@NonNull String provider) {
                 System.out.println("Provider enabled: " + provider);
             }
 
             @Override
-            public void onProviderDisabled(String provider) {
+            public void onProviderDisabled(@NonNull String provider) {
                 System.out.println("Provider disabled: " + provider);
             }
         };
 
-        if ((context
-                .checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        boolean isLocationPermissionsGranted = (context
+                .checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                 ||
                 (context.checkSelfPermission(
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
+
+        if (!isLocationPermissionsGranted) {
+            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, 1);
+        }
+
+        if (!isLocationPermissionsGranted) {
             System.out.println("Location permission not granted");
             Toast.makeText(context, "Location permission not granted", Toast.LENGTH_LONG).show();
             return null;
         }
 
-        locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener, Looper.getMainLooper());
+
+        boolean isLocationEnabled = locationManager.isProviderEnabled(locationProvider);
 
         Location location;
 
-        /**
-         * Check if location service is on and location is available
-         */
-
-        Boolean isLocationEnabled = locationManager.isProviderEnabled(locationProvider);
-
         if (isLocationEnabled) {
+            int count = 0;
+
             while (true) {
                 location = locationManager.getLastKnownLocation(locationProvider);
-                if (location != null) {
+                if (location != null || count == 5) {
                     break;
                 }
+                // wait for 2 seconds
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    System.out.println("Unable to use thread");
+                }
+                count++;
             }
             if (location == null) {
                 System.out.println("Location not found");

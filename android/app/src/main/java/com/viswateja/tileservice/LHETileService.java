@@ -1,5 +1,6 @@
 package com.viswateja.tileservice;
 
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
@@ -17,7 +18,7 @@ public class LHETileService extends TileService {
     private int tapCount = 0;
     private boolean isActive = false;
     private Handler handler = new Handler();
-    private final long REVERT_TIME = 1000 * 60;
+    private final long REVERT_TIME = 1000 * 30;
     private final String DEFAULT_TILE_TEXT = "LHE";
     private Runnable revertRunnable = () -> {
         if (tapCount < 3) {
@@ -29,8 +30,8 @@ public class LHETileService extends TileService {
     public void onClick() {
         tapCount++;
         System.out.println("Tapped " + tapCount);
+        showNumberOfClicksLeftOnTile();
         if (isActive) {
-            showNumberOfClicksLeftOnTile();
             if (tapCount == 2) {
                 revertTile();
                 stopEmergency();
@@ -70,7 +71,7 @@ public class LHETileService extends TileService {
 
         NotificationService.showNotification(this, "Emergency Triggered",
                 "You have triggered an emergency. In case if you need to cancel please double tap on same tile.");
-
+        playTone();
     }
 
     /**
@@ -116,6 +117,17 @@ public class LHETileService extends TileService {
         super.onStartListening();
     }
 
+    @Override
+    public void onTileAdded() {
+        super.onTileAdded();
+        getQsTile().setState(Tile.STATE_INACTIVE);
+    }
+
+    @Override
+    public void onTileRemoved() {
+        super.onTileRemoved();
+    }
+
     /**
      * Method to redirect to dial pad.
      */
@@ -124,5 +136,10 @@ public class LHETileService extends TileService {
         intent.setData(Uri.parse("tel:108"));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    private void playTone() {
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.emergency_trigger_alarm);
+        mediaPlayer.start();
     }
 }
